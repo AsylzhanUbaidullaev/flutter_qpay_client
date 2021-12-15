@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_qpay_client/app/data/models/help_model.dart';
 import 'package:flutter_qpay_client/base/base_provider.dart';
 import 'package:flutter_qpay_client/screens/profile/provider/help_option_provider.dart';
 import 'package:flutter_qpay_client/utilities/const_fields.dart';
@@ -10,13 +11,10 @@ import 'package:flutter_qpay_client/widgets/custom_app_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HelpOptionPage extends StatelessWidget {
-  // final String title;
-  // final int helpOptionId;
-  // final List<
-  // // HelpModelItem
-  // String
-  // > items;
-  // const HelpOptionPage({ Key? key, required this.title, required this.helpOptionId, required this.items }) : super(key: key);
+  final String? title;
+  final int? helpOptionId;
+  final List<HelpModelItem>? items;
+  const HelpOptionPage({ Key? key, required this.title, required this.helpOptionId, required this.items }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +43,10 @@ class HelpOptionPage extends StatelessWidget {
                         children: [
                           InkWell(
                             onTap: () {
-                              // model.toggleCollapsed(
-                              //   items,
-                              //   items[index].id,
-                              // );
+                              model.toggleCollapsed(
+                                items!,
+                                items![index].id!,
+                              );
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(
@@ -59,8 +57,8 @@ class HelpOptionPage extends StatelessWidget {
                                 children: [
                                   Flexible(
                                     child: Text(
-                                      // items[index].question,
-                                      'Что такое Q pay?',
+                                      items![index].question!,
+                                      // 'Что такое Q pay?',
                                       style: TextStyle(
                                         fontWeight: FontWeight.w500,
                                         color: AppColors.blackColor,
@@ -72,30 +70,30 @@ class HelpOptionPage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          // items[index].isCollapsed
-                          //     ? Padding(
-                          //         padding:
-                          //             const EdgeInsets.symmetric(horizontal: 5),
-                          //         child: Column(
-                          //           children: [
-                          //             Text(
-                          //               items[index].answer,
-                          //               style: TextStyle(
-                          //                 fontSize: 14,
-                          //                 color: AppColors.blackColor,
-                          //               ),
-                          //             ),
-                          //             UIHelper.verticalSpace(20),
-                          //           ],
-                          //         ),
-                          //       )
-                          //     : SizedBox(),
+                          items![index].isCollapsed
+                              ? Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        items![index].answer!,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: AppColors.blackColor,
+                                        ),
+                                      ),
+                                      UIHelper.verticalSpace(20),
+                                    ],
+                                  ),
+                                )
+                              : SizedBox(),
                         ],
                       );
                     },
                     separatorBuilder: (context, index) => Divider(height: 1),
-                    // itemCount: items.length,
-                    itemCount: 5,
+                    itemCount: items!.length,
+                    // itemCount: 5,
                   ),
                 ],
               ),

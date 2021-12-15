@@ -40,10 +40,10 @@ removeClientToken() async {
   prefs.remove(kCityId);
 }
 
-setCityData(int id, String city) async {
+setCityData(int? id, String? city) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setString(kCityName, city);
-  prefs.setInt(kCityId, id);
+  prefs.setString(kCityName, city!);
+  prefs.setInt(kCityId, id!);
   print("New city is: ${prefs.getString(kCityName)}");
 }
 
@@ -51,8 +51,7 @@ Future<String?> getCityName() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   return prefs.getString(kCityName);
 }
-
-Future<int?> getCityId() async {
+getCityId() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   return prefs.getInt(kCityId);
 }

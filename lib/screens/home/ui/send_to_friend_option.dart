@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/formatters/masked_input_formatter.dart';
 import 'package:flutter_qpay_client/screens/index.dart';
 import 'package:flutter_qpay_client/utilities/enums.dart';
+import 'package:flutter_qpay_client/widgets/loading_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:flutter_qpay_client/base/base_provider.dart';
-import 'package:flutter_qpay_client/models/partner_model.dart';
 import 'package:flutter_qpay_client/screens/home/provider/send_to_friend_option_provider.dart';
 import 'package:flutter_qpay_client/utilities/const_fields.dart';
 import 'package:flutter_qpay_client/utilities/const_methods.dart';
@@ -23,12 +23,20 @@ class SendToFriendOptionPage extends StatelessWidget {
   //   required this.partnerModel,
   // }) : super(key: key);
 
+  final int? partnerIndex;
+  final String? partnerName;
+  final String? availableBonus;
+
+  const SendToFriendOptionPage({Key? key, required this.partnerIndex, required this.availableBonus, required this.partnerName}) : super(key: key);
+
+
   @override
   Widget build(BuildContext context) {
     return BaseProvider<SendToFriendOptionProvider>(
       model: SendToFriendOptionProvider(),
       builder: (context, model, child) {
-        return Scaffold(
+        return model.isLoading ? LoadingView() :
+        Scaffold(
           appBar: CustomAppBar(
             height: getProportionateScreenHeight(110),
             child: AppBarChildWithBackButton(title: 'Передать другу'),
@@ -60,7 +68,7 @@ class SendToFriendOptionPage extends StatelessWidget {
                           SvgPicture.asset(AppSvgImages.ic_profile),
                           UIHelper.horizontalSpace(10),
                           Text(
-                            'Shooqan.kz',
+                            partnerName!,
                             // partnerModel.name,
                             style: TextStyle(
                               fontSize: 16,
@@ -92,7 +100,7 @@ class SendToFriendOptionPage extends StatelessWidget {
                       ),
                       UIHelper.verticalSpace(10),
                       Text(
-                        '750 Б',
+                        availableBonus!,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
@@ -128,17 +136,17 @@ class SendToFriendOptionPage extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Color(0xffF8F8F8),
                           borderRadius: BorderRadius.circular(8),
-                          // border: model.hasError
-                          //     ? Border.all(color: AppColors.systemRedColor)
-                          //     : null,
+                          border: model.hasError
+                              ? Border.all(color: AppColors.systemRedColor)
+                              : null,
                         ),
                         child: TextField(
                           cursorColor: AppColors.blackColor,
                           controller: model.bonusController,
                           keyboardType: TextInputType.phone,
                           onChanged: (value) {
-                            // model.checkBonusValue(partnerModel.bonusesSum);
-                            // model.checkValues();
+                            model.checkBonusValue(availableBonus!);
+                            model.checkValues();
                           },
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -152,7 +160,7 @@ class SendToFriendOptionPage extends StatelessWidget {
                               children: [
                                 UIHelper.verticalSpace(15),
                                 Text(
-                                  'Error',
+                                  'У вас недостаточно бонусов',
                                   style: TextStyle(
                                     color: AppColors.systemRedColor,
                                   ),
@@ -241,11 +249,7 @@ class SendToFriendOptionPage extends StatelessWidget {
     );
   }
 
-  _buildBottomNavbar(
-    context,
-    SendToFriendOptionProvider provider,
-    // PartnerModel partnerModel
-  ) {
+  _buildBottomNavbar(context, SendToFriendOptionProvider provider) {
     return Container(
       padding: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
@@ -272,12 +276,15 @@ class SendToFriendOptionPage extends StatelessWidget {
             color: provider.isButtonEnabled ? null : AppColors.inactiveColor,
             width: double.infinity,
             press: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          IndexScreen(selectedMenuFromInitial: MenuState.home)),
-                  (route) => false);
+              provider.sendBonus(context, partnerIndex!);
+
+              // Navigator.pushAndRemoveUntil(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) =>
+              //             IndexScreen(selectedMenuFromInitial: MenuState.home)),
+              //     (route) => false);
+
               // provider.sendBonus(context
               // partnerModel
             },

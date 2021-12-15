@@ -9,7 +9,9 @@ import 'package:flutter_qpay_client/utilities/const_methods.dart';
 import 'package:flutter_qpay_client/utilities/ui_helper.dart';
 import 'package:flutter_qpay_client/widgets/app_bar_without_back_button.dart';
 import 'package:flutter_qpay_client/widgets/custom_app_bar.dart';
+import 'package:flutter_qpay_client/widgets/loading_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 class TransactionPage extends StatelessWidget {
   const TransactionPage({Key? key}) : super(key: key);
@@ -25,8 +27,11 @@ class TransactionPage extends StatelessWidget {
         ),
         body: BaseProvider<TransactionsProvider>(
           model: TransactionsProvider(),
+          onReady: (value) async => await value.init(),
           builder: (context, model, child) {
-            return SingleChildScrollView(
+            return model.isLoading ? LoadingView() :
+            SingleChildScrollView(
+              controller: model.controller,
               child: Column(
                 children: [
                   UIHelper.verticalSpace(15),
@@ -40,7 +45,7 @@ class TransactionPage extends StatelessWidget {
                           clipBehavior: Clip.none,
                           children: [
                             Period(
-                              transactionsState: model,
+                              transactionsProvider: model,
                             ),
                           ],
                         );
@@ -60,7 +65,10 @@ class TransactionPage extends StatelessWidget {
                         children: [
                           SvgPicture.asset(AppSvgImages.ic_calendar),
                           UIHelper.horizontalSpace(15),
-                          Text('26 мая - 26 июня'),
+                          Text(
+                            // '26 мая - 26 июня'
+                            '${DateFormat('dd MMMM').format(model.fromDate)} - ${DateFormat('dd MMMM').format(model.toDate)}',
+                          ),
                         ],
                       ),
                     ),
@@ -75,7 +83,7 @@ class TransactionPage extends StatelessWidget {
                           return Wrap(
                             children: [
                               TransactionFilter(
-                               
+                               transactionsProvider: model,
                               ),
                             ],
                           );
@@ -87,7 +95,8 @@ class TransactionPage extends StatelessWidget {
                       child: Row(
                         children: [
                           Text(
-                            'Все транзакций',
+                            // 'Все транзакций',
+                            "${model.getTransactionsTypeWord(context)}",
                             style: TextStyle(
                               fontSize: 13,
                               color: AppColors.primaryColor,
@@ -103,40 +112,56 @@ class TransactionPage extends StatelessWidget {
                     ),
                   ),
                   UIHelper.verticalSpace(10),
-                  model.isLoadingPage
+                  model.isLoading
                       ? Center(
                           child: CircularProgressIndicator(
                             color: AppColors.primaryColor,
                           ),
                         )
                       :
-                      // model.transactionList[0].data!.isEmpty
-                      //     ? Card(
-                      //         color: AppColors.whiteColor,
-                      //         child: Container(
-                      //             width: MediaQuery.of(context).size.width * 0.8,
-                      //             padding: EdgeInsets.symmetric(
-                      //                 horizontal: 20, vertical: 15),
-                      //             child: Text(
-                      //               "You dont have transactions",
-                      //               textAlign: TextAlign.center,
-                      //               style: TextStyle(
-                      //                 color: AppColors.darkGrayColor,
-                      //                 fontSize: 14,
-                      //                 fontWeight: FontWeight.w400,
-                      //                 fontFamily: 'Inter',
-                      //               ),
-                      //             )),
-                      //       )
-                      //     :
+                      model.allTransactionsList[0].data!.isEmpty
+                          ? Card(
+                              color: AppColors.whiteColor,
+                              child: Container(
+                                  width: MediaQuery.of(context).size.width * 0.8,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 15),
+                                  child: Text(
+                                    "You dont have transactions",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: AppColors.darkGrayColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Inter',
+                                    ),
+                                  )),
+                            )
+                          :
                       ListView.builder(
                           shrinkWrap: true,
                           physics: BouncingScrollPhysics(),
-                          itemCount: 3,
+                          itemCount: model.allTransactionsList.length,
                           itemBuilder: (context, index) {
-                            return TransactionsList();
+                            return model.allTransactionsList.last.data!.isEmpty 
+                                    ? SizedBox()
+                                    : TransactionsList(
+                                      transactionsModel: model.allTransactionsList[index],
+                                      transactionsProvider: model,
+                                    );
                           },
                         ),
+                        model.isMoreTransactionsLoading
+                                        ? Container(
+                                            padding: EdgeInsets.only(
+                                                top: 10, bottom: 12),
+                                            child: Center(
+                                              child: CircularProgressIndicator(
+                                                color: AppColors.primaryColor,
+                                              ),
+                                            ),
+                                          )
+                                        : SizedBox(),
                   UIHelper.verticalSpace(30),
                 ],
               ),

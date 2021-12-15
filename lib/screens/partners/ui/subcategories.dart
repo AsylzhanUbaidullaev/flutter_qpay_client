@@ -9,25 +9,28 @@ import 'package:flutter_qpay_client/utilities/ui_helper.dart';
 import 'package:flutter_qpay_client/widgets/app_bar_with_back_button.dart';
 import 'package:flutter_qpay_client/widgets/custom_app_bar.dart';
 import 'package:flutter_qpay_client/widgets/list_of_partners.dart';
+import 'package:flutter_qpay_client/widgets/loading_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SubcategoriesPage extends StatelessWidget {
-  // final int? id;
-  // final String? title;
-  // const SubcategoriesPage({ Key? key, required this.id, required this.title }) : super(key: key);
+  final int id;
+  final String title;
+  const SubcategoriesPage({ Key? key, required this.id, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BaseProvider<SubcategoriesProvider>(
+      onReady: (value) async => await value.init(context, id),
       model: SubcategoriesProvider(),
       builder: (context, model, child) {
-        return Scaffold(
+        return model.isLoading ? LoadingView() :
+        Scaffold(
           appBar: CustomAppBar(
             height: getProportionateScreenHeight(160),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                AppBarChildWithBackButton(title: 'Магазин'),
+                AppBarChildWithBackButton(title: title),
                 UIHelper.verticalSpace(20),
                 Padding(
                   padding: const EdgeInsets.only(left: 25, right: 10),
@@ -85,27 +88,6 @@ class SubcategoriesPage extends StatelessWidget {
                   ),
                 ),
                 UIHelper.verticalSpace(15),
-                // FutureBuilder<List<SubCategoryModel>>(
-                //     // future: model.fSubCategoryModel,
-                //     builder: (context, snapshot) {
-                //       if (snapshot.hasData) {
-                //         if (snapshot.data.isEmpty) {
-                //           return Container(
-                //             width: double.maxFinite,
-                //             height: 50,
-                //             child: Center(
-                //               child: Text(
-                //                 "empty_podcategorii",
-                //                 style: TextStyle(
-                //                   fontSize: 14,
-                //                   fontWeight: FontWeight.w500,
-                //                   color: AppColors.blackColor,
-                //                 ),
-                //               ),
-                //             ),
-                //           );
-                //         }
-                //         return 
                         ListView.separated(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
@@ -118,9 +100,8 @@ class SubcategoriesPage extends StatelessWidget {
                                   MaterialPageRoute(
                                     builder: (context) =>
                                         SubcategoryDetailsPage(
-                                      // title: model.subcategories[index],
-                                      // title: snapshot.data[index].name,
-                                      // subCategoryId: snapshot.data[index].id,
+                                          id: model.subcategories![index].id!,
+                                          title: model.subcategories![index].name!,
                                     ),
                                   ),
                                 );
@@ -142,9 +123,9 @@ class SubcategoriesPage extends StatelessWidget {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      // model.subcategories[index],
+                                      model.subcategories![index].name!,
                                       // snapshot.data![index].name,
-                                      'Мебель',
+                                      // 'Мебель',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,
@@ -165,56 +146,43 @@ class SubcategoriesPage extends StatelessWidget {
                           },
                           separatorBuilder: (context, index) =>
                               UIHelper.verticalSpace(18),
-                          // itemCount: model.subcategories.length,
-                          itemCount: 7,
-                          // itemCount: snapshot.data.length,
+                          itemCount: model.subcategories!.length,
+                          // itemCount: 7,
                         ),
-                    //   } else {
-                    //     return Container(
-                    //       width: double.maxFinite,
-                    //       height: MediaQuery.of(context).size.height * 0.25,
-                    //       child: Center(
-                    //         child: CircularProgressIndicator(
-                    //           color: AppColors.primaryColor,
-                    //         ),
-                    //       ),
-                    //     );
-                    //   }
-                    // }),
                 UIHelper.verticalSpace(30),
                 // model.initPartners.first.data.isNotEmpty
                 //     ? 
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 25),
-                            child: Text(
-                              'Партнеры',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.blackColor,
-                              ),
-                            ),
-                          ),
-                          UIHelper.verticalSpace(18),
-                          ListView.separated(
-                            // itemCount: model.initPartners.length,
-                            itemCount: 2,
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return listOfPartners(
-                                  // model.initPartners[index].data
-                                  );
-                            },
-                            separatorBuilder: (BuildContext context, int index) {
-                              return UIHelper.verticalSpace(10);
-                            },
-                          )
-                        ],
-                      ),
+                    // Column(
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: [
+                    //       Padding(
+                    //         padding: const EdgeInsets.symmetric(horizontal: 25),
+                    //         child: Text(
+                    //           'Партнеры',
+                    //           style: TextStyle(
+                    //             fontSize: 16,
+                    //             fontWeight: FontWeight.w500,
+                    //             color: AppColors.blackColor,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //       UIHelper.verticalSpace(18),
+                    //       ListView.separated(
+                    //         // itemCount: model.initPartners.length,
+                    //         itemCount: 2,
+                    //         shrinkWrap: true,
+                    //         physics: NeverScrollableScrollPhysics(),
+                    //         itemBuilder: (context, index) {
+                    //           return listOfPartners(
+                    //               model
+                    //               );
+                    //         },
+                    //         separatorBuilder: (BuildContext context, int index) {
+                    //           return UIHelper.verticalSpace(10);
+                    //         },
+                    //       )
+                    //     ],
+                    //   ),
                     // : Container(),
                 // model.isMoreParnersLoading
                 //     ? Center(

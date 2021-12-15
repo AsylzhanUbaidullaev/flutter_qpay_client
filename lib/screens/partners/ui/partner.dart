@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_qpay_client/base/base_provider.dart';
-import 'package:flutter_qpay_client/models/category_model.dart';
+// import 'package:flutter_qpay_client/models/category_model.dart';
 import 'package:flutter_qpay_client/screens/partners/provider/partners_provider.dart';
+import 'package:flutter_qpay_client/screens/partners/ui/partner_list.dart';
 import 'package:flutter_qpay_client/screens/partners/ui/subcategories.dart';
 import 'package:flutter_qpay_client/utilities/const_fields.dart';
 import 'package:flutter_qpay_client/utilities/const_methods.dart';
 import 'package:flutter_qpay_client/utilities/size_config.dart';
 import 'package:flutter_qpay_client/utilities/ui_helper.dart';
 import 'package:flutter_qpay_client/widgets/custom_app_bar.dart';
+import 'package:flutter_qpay_client/widgets/loading_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class PartnerPage extends StatelessWidget {
@@ -16,13 +18,19 @@ class PartnerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseProvider<PartnersProvider>(
+      onReady: (value) async => await value.init(context),
       model: PartnersProvider(),
       builder: (context, model, child) {
-        return GestureDetector(
-          onTap: () {},
-          child: Scaffold(
-            appBar: _buildAppBarWithSearchField(model),
-            body: SingleChildScrollView(
+        return model.isLoading ? LoadingView() :
+        GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: 
+          Scaffold(
+            appBar: _buildAppBarWithSearchField(model, context),
+            body: model.isLoading ? LoadingView() : !model.isSearching ?
+            SingleChildScrollView(
               // controller: model.isSearchingPartner
               //     ? model.partnersController
               //     : model.searchController,
@@ -42,27 +50,22 @@ class PartnerPage extends StatelessWidget {
                     ),
                   ),
                   UIHelper.verticalSpace(15),
-                  // FutureBuilder<List<CategoriesModel>>(
-                  //     // future: model.fCategoryModel,
-                  //     builder: (context, snapshot) {
-                  //       if (snapshot.hasData) {
-                  //         return 
                           ListView.separated(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => SubcategoriesPage(
-                                  //       id: snapshot.data![index].id,
-                                  //       title: snapshot.data![index].name,
-                                  //     ),
-                                  //   ),
-                                  // );
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => SubcategoriesPage()));
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SubcategoriesPage(
+                                        id: model.categories[index].id!,
+                                        title: model.categories[index].name!
+                                      ),
+                                    ),
+                                  );
+                                  // Navigator.push(context, MaterialPageRoute(builder: (context) => SubcategoriesPage()));
                                 },
                                 child: Container(
                                   height: 62,
@@ -75,13 +78,14 @@ class PartnerPage extends StatelessWidget {
                                   padding: EdgeInsets.symmetric(horizontal: 20),
                                   child: Row(
                                     children: [
-                                      SvgPicture.asset(AppSvgImages.ic_bag),
+                                      SvgPicture.network(model.categories[index].icon!),
                                       // SvgPicture.network(
                                       //     snapshot.data![index].icon),
                                       UIHelper.horizontalSpace(15),
                                       Text(
                                         // snapshot.data![index].name,
-                                        'Магазин',
+                                        model.categories[index].name ?? 'Магазин',
+                                        // 'Магазин',
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
@@ -103,32 +107,24 @@ class PartnerPage extends StatelessWidget {
                             },
                             separatorBuilder: (context, index) =>
                                 UIHelper.verticalSpace(10),
-                            itemCount: 10,
+                            itemCount: model.categories.length,
                             // itemCount: snapshot.data.length,
                           ),
-                      //   } else
-                      //     return Container(
-                      //       // color: Colors.red,
-                      //       width: double.maxFinite,
-                      //       height: 200,
-                      //       child: Center(
-                      //         child: CircularProgressIndicator(
-                      //           color: AppColors.primaryColor,
-                      //         ),
-                      //       ),
-                      //     );
-                      // }),
                   UIHelper.verticalSpace(50),
                 ],
               ),
-            ),
+            ) : model.isPartnerUpdating ? LoadingView() : PartnerList(
+            model: model,
+            list1: model.searchPartnersList,
+            total: model.searchPaginationList.first.meta!.total,
           ),
+          ) 
         );
       },
     );
   }
 
-  _buildAppBarWithSearchField(PartnersProvider model) {
+  _buildAppBarWithSearchField(PartnersProvider model, context) {
     return CustomAppBar(
       height: getProportionateScreenHeight(160),
       child: Column(
@@ -153,15 +149,12 @@ class PartnerPage extends StatelessWidget {
                     ),
                     child: TextField(
                       onChanged: (value) async {
-                        // if (value == "") {
-                        //   model.searchListClear();
-                        // } else {
-                        //   await model.searchPartner(value);
-                        // }
-                        // state.search(value);
+                        await model.searchPartners();
                       },
                       keyboardType: TextInputType.text,
                       cursorColor: AppColors.primaryColor,
+                      focusNode: model.focus,
+                      controller: model.searchController,
                       decoration: InputDecoration(
                         hintText: 'Название партнера',
                         hintStyle: TextStyle(
@@ -171,6 +164,23 @@ class PartnerPage extends StatelessWidget {
                         ),
                         border: InputBorder.none,
                       ),
+                    ),
+                  ),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    alignment: Alignment.centerRight,
+                  ),
+                  onPressed: () {
+                    model.cancelSearch();
+                  },
+                  child: Text(
+                    'Отменить',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.primaryColor,
                     ),
                   ),
                 ),

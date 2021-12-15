@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_qpay_client/widgets/loading_view.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:flutter_qpay_client/base/base_provider.dart';
 import 'package:flutter_qpay_client/screens/transactions/provider/transaction_details_provider.dart';
 import 'package:flutter_qpay_client/utilities/const_fields.dart';
@@ -7,10 +10,13 @@ import 'package:flutter_qpay_client/utilities/size_config.dart';
 import 'package:flutter_qpay_client/utilities/ui_helper.dart';
 import 'package:flutter_qpay_client/widgets/app_bar_with_back_button.dart';
 import 'package:flutter_qpay_client/widgets/custom_app_bar.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class TransactionDetail extends StatelessWidget {
-  const TransactionDetail({Key? key}) : super(key: key);
+  final int transactionId;
+  const TransactionDetail({
+    Key? key,
+    required this.transactionId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +28,10 @@ class TransactionDetail extends StatelessWidget {
       ),
       body: BaseProvider<TransactionDetailsProvider>(
         model: TransactionDetailsProvider(),
+        onReady: (value) async => await value.init(transactionId, context),
         builder: (context, model, child) {
-          return Column(
+          return model.isLoading ? LoadingView() :
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               UIHelper.verticalSpace(30),
@@ -42,7 +50,8 @@ class TransactionDetail extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Text(
                         // type
-                        'Начисление бонусов',
+                        // 'Начисление бонусов',
+                        model.transactionDetailsModel!.detail!.type!,
                         style: TextStyle(
                           fontSize: 13,
                           color: AppColors.grayColor,
@@ -54,10 +63,12 @@ class TransactionDetail extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Text(
                         '+750 Б',
+                        // "${model.transactionDetailsModel!.bonus!} Б",
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.systemGreenColor,
+                          color: model.defineColor(model.transactionDetailsModel!.detail!.type!)
+                          // AppColors.systemGreenColor,
                           // model.defineColor(snapshot.data.detail.type),
                         ),
                       ),
@@ -107,6 +118,7 @@ class TransactionDetail extends StatelessWidget {
                             //     ),
                             UIHelper.horizontalSpace(10),
                             Text(
+                              // model.transactionDetailsModel!.name ?? 'Name',
                               'Shooqan',
                               // '${snapshot.data.partner.name}',
                               style: TextStyle(

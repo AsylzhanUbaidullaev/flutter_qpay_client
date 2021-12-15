@@ -10,7 +10,7 @@ import 'package:pinput/pin_put/pin_put.dart';
 
 class VerificationPage extends StatelessWidget {
 
-  final String phoneNumber;
+  final String? phoneNumber;
 
   const VerificationPage({
     Key? key,
@@ -80,7 +80,10 @@ class VerificationPage extends StatelessWidget {
                         ? null
                         : AppColors.inactiveColor,
                     press: model.isButtonEnabled
-                        ? () async {model.toAddNamePage(context);}
+                        ? () async {
+                          model.toAddName(context, phoneNumber!);
+                          // model.toAddNamePage(context);
+                          }
                         : null,
                     width: double.infinity,
                   

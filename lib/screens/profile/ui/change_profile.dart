@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_qpay_client/screens/profile/provider/profile_provider.dart';
 import 'package:flutter_qpay_client/widgets/default_button.dart';
+import 'package:flutter_qpay_client/widgets/loading_view.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:flutter_qpay_client/base/base_provider.dart';
@@ -12,22 +14,11 @@ import 'package:flutter_qpay_client/utilities/ui_helper.dart';
 import 'package:flutter_qpay_client/widgets/app_bar_with_back_button.dart';
 import 'package:flutter_qpay_client/widgets/custom_app_bar.dart';
 
-class ChangeProfilePage extends StatefulWidget {
+class ChangeProfilePage extends StatelessWidget {
   final String name;
   final String imgURL;
-
-  const ChangeProfilePage({
-    Key? key,
-    required this.name,
-    required this.imgURL,
-  }) : super(key: key);
-
-  @override
-  State<ChangeProfilePage> createState() => _ChangeProfilePageState();
-}
-
-class _ChangeProfilePageState extends State<ChangeProfilePage> {
-  TextEditingController controller = TextEditingController();
+  final ProfileProvider profModel;
+  const ChangeProfilePage({Key? key, required this.name, required this.imgURL, required this.profModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +35,10 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
         backgroundColor: AppColors.whiteColor,
         body: BaseProvider<ChangeProfileProvider>(
           model: ChangeProfileProvider(),
+          onReady: (value) async => await value.init(name),
           builder: (context, model, child) {
-            return SafeArea(
+            return model.isLoading ? LoadingView() :
+            SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -150,13 +143,16 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                     ),
                     padding: EdgeInsets.only(left: 10),
                     child: TextFormField(
-                      controller: controller,
+                      controller: model.nameController,
                       style: TextStyle(color: AppColors.blackColor),
                       cursorColor: AppColors.blackColor,
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                       ),
+                      onChanged: (value) {
+                        model.checkValues();
+                      },
                     ),
                   ),
                   Spacer(),
@@ -165,7 +161,15 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                     child: DefaultButton(
                       width: double.infinity,
                       text: 'Сохранить',
+                      color: model.isButtonEnabled ? null : AppColors.inactiveColor,
                       press: () async {
+                        // model.isButtonEnabled ?  
+                          model.changeUserData(context, model.nameController.text, profModel);
+                        // : 
+                        //   //TODO add alert dialog
+                        //   print('Name cant be empty');
+                      
+                    
                         // if (model.isImagePicked) {
                         //   print("FILE PICKED!");
                         //   await model.sendChanges(context, controller.text,

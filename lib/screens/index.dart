@@ -8,6 +8,7 @@ import 'package:flutter_qpay_client/screens/profile/ui/profile.dart';
 import 'package:flutter_qpay_client/screens/transactions/ui/transactions.dart';
 import 'package:flutter_qpay_client/utilities/const_fields.dart';
 import 'package:flutter_qpay_client/utilities/enums.dart';
+import 'package:flutter_qpay_client/utilities/size_config.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class IndexScreen extends StatefulWidget {
@@ -41,6 +42,10 @@ class _IndexScreenState extends State<IndexScreen> {
   @override
   Widget build(BuildContext context) {
 
+    //
+    // Ote vazhnuy -___-
+    SizeConfig().init(context);
+    //
     List<Widget> screens = [
       HomePage(),
       TransactionPage(),

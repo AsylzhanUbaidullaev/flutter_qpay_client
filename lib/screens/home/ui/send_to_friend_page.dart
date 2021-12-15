@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_qpay_client/base/base_provider.dart';
+import 'package:flutter_qpay_client/screens/home/provider/home_provider.dart';
 import 'package:flutter_qpay_client/screens/home/provider/send_to_friend_provider.dart';
 import 'package:flutter_qpay_client/screens/home/ui/send_to_friend_option.dart';
 import 'package:flutter_qpay_client/utilities/const_fields.dart';
 import 'package:flutter_qpay_client/utilities/const_methods.dart';
 import 'package:flutter_qpay_client/utilities/size_config.dart';
 import 'package:flutter_qpay_client/utilities/ui_helper.dart';
+import 'package:flutter_qpay_client/widgets/loading_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SendToFriend extends StatelessWidget {
@@ -13,10 +15,13 @@ class SendToFriend extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(context),
-      body: BaseProvider<SendToFriendProvider>(
-        model: SendToFriendProvider(),
+      body: BaseProvider<HomeProvider>(
+        onReady: (value) => value.init(context),
+        model: HomeProvider(),
         builder: (context, model, child) {
-          return SingleChildScrollView(
+          return model.isLoading ? LoadingView() :
+          
+          SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -43,7 +48,11 @@ class SendToFriend extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      SendToFriendOptionPage()));
+                                      SendToFriendOptionPage(
+                                        partnerIndex: model.sendToFriendPartnerList[index].id!,
+                                        availableBonus: model.sendToFriendPartnerList[index].bonusesSum,
+                                        partnerName: model.sendToFriendPartnerList[index].name,
+                                        )));
                         },
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 25),
@@ -61,7 +70,7 @@ class SendToFriend extends StatelessWidget {
                               ),
                               UIHelper.horizontalSpace(10),
                               Text(
-                                'Shooqan',
+                                model.sendToFriendPartnerList[index].name!,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
@@ -70,7 +79,7 @@ class SendToFriend extends StatelessWidget {
                               ),
                               Spacer(),
                               Text(
-                                '750 Б',
+                                model.sendToFriendPartnerList[index].bonusesSum!,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -84,7 +93,7 @@ class SendToFriend extends StatelessWidget {
                     },
                     separatorBuilder: (context, index) =>
                         UIHelper.verticalSpace(10),
-                    itemCount: 5)
+                    itemCount: model.sendToFriendPartnerList.length)
               ],
             ),
           );

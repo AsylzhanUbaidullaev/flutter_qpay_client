@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_qpay_client/base/base_provider.dart';
-import 'package:flutter_qpay_client/models/transactions_filter_model.dart';
+// import 'package:flutter_qpay_client/models/transactions_filter_model.dart';
 import 'package:flutter_qpay_client/screens/transactions/provider/transaction_filter_provider.dart';
+import 'package:flutter_qpay_client/screens/transactions/provider/transactions_provider.dart';
 import 'package:flutter_qpay_client/utilities/const_fields.dart';
 import 'package:flutter_qpay_client/utilities/ui_helper.dart';
 import 'package:flutter_qpay_client/widgets/default_button.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TransactionFilter extends StatelessWidget {
-  late Future<TransactionsBytTypeModel> fTransactionsByTypeModel;
+  final TransactionsProvider transactionsProvider;
+
+  const TransactionFilter({Key? key, required this.transactionsProvider}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,16 +50,17 @@ class TransactionFilter extends StatelessWidget {
                           ),
                         ),
                         UIHelper.verticalSpace(30),
-                        // FutureBuilder<TransactionsBytTypeModel>(
-                        //     future: fTransactionsByTypeModel,
-                        //     builder: (context, snapshot) {
-                        //       if (snapshot.hasData) {
-                        //         return 
+                        ListView.builder(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          itemCount: transactionsProvider.typesList.length,
+                          itemBuilder: (context, index) {
+                            return
                                 Column(
                                   children: [
                                     InkWell(
                                       onTap: () {
-                                        model.setSelectedType(0);
+                                        model.setSelectedType(index);
                                       },
                                       child: Row(
                                         mainAxisAlignment:
@@ -65,7 +69,7 @@ class TransactionFilter extends StatelessWidget {
                                           Row(
                                             children: [
                                               Text(
-                                                model.filterTypesList[0]['name'],
+                                                transactionsProvider.typesList[index]['name'],
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w400,
@@ -73,8 +77,7 @@ class TransactionFilter extends StatelessWidget {
                                                 ),
                                               ),
                                               Text(
-                                                ' (2)',
-                                                // ' (${snapshot.data!.transactionsCount})',
+                                                ' (${transactionsProvider.typesList[index]['count']})',
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w400,
@@ -83,85 +86,7 @@ class TransactionFilter extends StatelessWidget {
                                               ),
                                             ],
                                           ),
-                                          model.selectedType == 0
-                                              ? SvgPicture.asset(
-                                                  AppSvgImages.ic_check)
-                                              : SvgPicture.asset(
-                                                  AppSvgImages.ic_empty_check),
-                                        ],
-                                      ),
-                                    ),
-                                    UIHelper.verticalSpace(25),
-                                    //======================================
-                                    InkWell(
-                                      onTap: () {
-                                        model.setSelectedType(1);
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                model.filterTypesList[1]['name'],
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: AppColors.blackColor,
-                                                ),
-                                              ),
-                                              Text(
-                                                ' (1)',
-                                                // ' (${snapshot.data!.accrualTransactionsCount})',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: AppColors.grayColor,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          model.selectedType == 1
-                                              ? SvgPicture.asset(
-                                                  AppSvgImages.ic_check)
-                                              : SvgPicture.asset(
-                                                  AppSvgImages.ic_empty_check),
-                                        ],
-                                      ),
-                                    ),
-                                    UIHelper.verticalSpace(25),
-                                    //===================================
-                                    InkWell(
-                                      onTap: () {
-                                        model.setSelectedType(2);
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                model.filterTypesList[2]['name'],
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: AppColors.blackColor,
-                                                ),
-                                              ),
-                                              Text(
-                                                ' (1)',
-                                                // ' (${snapshot.data!.debitingTransactionsCount})',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: AppColors.grayColor,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          model.selectedType == 2
+                                          model.selectedType == index
                                               ? SvgPicture.asset(
                                                   AppSvgImages.ic_check)
                                               : SvgPicture.asset(
@@ -171,27 +96,15 @@ class TransactionFilter extends StatelessWidget {
                                     ),
                                     UIHelper.verticalSpace(25),
                                   ],
-                                ),
-                            //   } else {
-                            //     return Container(
-                            //         child: Center(
-                            //             child: CircularProgressIndicator(
-                            //       color: AppColors.primaryColor,
-                            //     )));
-                            //   }
-                            // }),
+                                );
+                          }),
+                          
                         UIHelper.verticalSpace(40),
                         DefaultButton(
                           text: 'Применить',
                           width: double.infinity,
-                          press: () {
-                            // widget.transactionProvider
-                            //     .setTransactionType(model.selectedType);
-                            // widget.transactionProvider
-                            //     .filterTransactions(context);
-                            // print(
-                            //     "TRANSACTION TYPE: ${widget.transactionProvider.type}");
-                            Navigator.pop(context);
+                          press: () async {
+                            await model.apply(context, transactionsProvider);
                           },
                         ),
                         UIHelper.verticalSpace(30),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_qpay_client/base/base_provider.dart';
-import 'package:flutter_qpay_client/models/partner_model.dart';
+// import 'package:flutter_qpay_client/models/partner_model.dart';
 import 'package:flutter_qpay_client/screens/partners/provider/subcategory_details_provider.dart';
 import 'package:flutter_qpay_client/screens/partners/ui/partner_details.dart';
 import 'package:flutter_qpay_client/utilities/const_fields.dart';
@@ -10,23 +10,28 @@ import 'package:flutter_qpay_client/utilities/ui_helper.dart';
 import 'package:flutter_qpay_client/widgets/app_bar_with_back_button.dart';
 import 'package:flutter_qpay_client/widgets/custom_app_bar.dart';
 import 'package:flutter_qpay_client/widgets/list_of_partners.dart';
+import 'package:flutter_qpay_client/widgets/loading_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SubcategoryDetailsPage extends StatelessWidget {
-  const SubcategoryDetailsPage({Key? key}) : super(key: key);
+  final int id;
+  final String title;
+  const SubcategoryDetailsPage({required this.id, required this.title, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BaseProvider<SubcategoryDetailsProvider>(
+      onReady: (value) async => await value.init(context),
       model: SubcategoryDetailsProvider(),
       builder: (context, model, child) {
-        return Scaffold(
+        return model.isLoading ? LoadingView() :
+        Scaffold(
           appBar: CustomAppBar(
             height: getProportionateScreenHeight(160),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                AppBarChildWithBackButton(title: 'Мебель'),
+                AppBarChildWithBackButton(title: title),
                 UIHelper.verticalSpace(20),
                 Padding(
                   padding: const EdgeInsets.only(left: 25, right: 10),
@@ -72,43 +77,63 @@ class SubcategoryDetailsPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 UIHelper.verticalSpace(30),
-                // model.initPartnerListModel.first.data.isEmpty &&
-                //         model.initPartnersWithBonus.isEmpty
-                //     ? Center(
-                //         child: Card(
-                //           color: AppColors.whiteColor,
-                //           child: Container(
-                //               width: MediaQuery.of(context).size.width * 0.8,
-                //               padding: EdgeInsets.symmetric(
-                //                   horizontal: 20, vertical: 15),
-                //               child: Text(
-                //                 "subcategories_has_not_partners",
-                //                 textAlign: TextAlign.center,
-                //                 style: TextStyle(
-                //                   color: AppColors.darkGrayColor,
-                //                   fontSize: 14,
-                //                   fontWeight: FontWeight.w400,
-                //                   fontFamily: 'Inter',
-                //                 ),
-                //               )),
-                //         ),
-                //       )
-                //     : 
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           UIHelper.verticalSpace(10),
-                          _getPartnersWithBonuses(model.initPartnersWithBonus),
+                          // _getPartnersWithBonuses(model.initPartnersWithBonus),
                           UIHelper.verticalSpace(10),
                           ListView.separated(
                             // itemCount: model.initPartnerListModel.length,
-                            itemCount: 3,
+                            itemCount: model.partnersHasBonuses.length,
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
-                              return listOfPartners(
-                                  // model.initPartnerListModel[index].data
-                                  );
+                              return GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        PartnerDetailsPage(
+                          idPartner: model.partnersHasBonuses[index].id,
+                          )));
+          },
+          child: Container(
+            padding: EdgeInsets.all(15),
+            margin: EdgeInsets.symmetric(horizontal: 25),
+            decoration: BoxDecoration(
+              color: AppColors.whiteColor,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [kWhiteBoxshadow],
+            ),
+            child: Row(
+              children: [
+                SvgPicture.asset(AppSvgImages.ic_profile),
+                UIHelper.horizontalSpace(10),
+                Text(
+                  // 'Pandora',
+                  model.partnersHasBonuses[index].name!,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.blackColor,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  // '750 Б',
+                  "${model.partnersHasBonuses[index].bonusesSum ?? 0} Б",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.systemGreenColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
                             },
                             separatorBuilder:
                                 (BuildContext context, int index) {
@@ -139,69 +164,69 @@ class SubcategoryDetailsPage extends StatelessWidget {
   }
 }
 
-Widget _getPartnersWithBonuses(List<PartnerModel> list) {
-  return ListView.separated(
-    shrinkWrap: true,
-    physics: NeverScrollableScrollPhysics(),
-    itemBuilder: (context, index) {
-      return GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PartnerDetailsPage(
-                // idPartner: 2,
-              ),
-            ),
-          );
-        },
-        child: Container(
-          padding: EdgeInsets.all(15),
-          margin: EdgeInsets.symmetric(horizontal: 25),
-          decoration: BoxDecoration(
-            color: AppColors.whiteColor,
-            borderRadius: BorderRadius.circular(8),
-            boxShadow: [kWhiteBoxshadow],
-          ),
-          child: Row(
-            children: [
-              SvgPicture.asset(AppSvgImages.ic_profile),
-              UIHelper.horizontalSpace(10),
-              Text(
-                // list[index].name,
-                'Shooqan',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.blackColor,
-                ),
-              ),
-              Spacer(),
-              // list[index].bonusesSum != null
-              //     ? 
-                  Text(
-                      // "${list[index].bonusesSum} Б",
-                      '750 Б',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.systemGreenColor,
-                      ),
-                    )
-                  // : Text(
-                  //     "${list[index].bonusPercentage} %",
-                  //     style: TextStyle(
-                  //       fontSize: 16,
-                  //       fontWeight: FontWeight.w600,
-                  //       color: AppColors.blackColor,
-                  //     ),
-                  //   ),
-            ],
-          ),
-        ),
-      );
-    },
-    separatorBuilder: (context, index) => UIHelper.verticalSpace(18),
-    itemCount: list.length,
-  );
-}
+// Widget _getPartnersWithBonuses(List<PartnerModel> list) {
+//   return ListView.separated(
+//     shrinkWrap: true,
+//     physics: NeverScrollableScrollPhysics(),
+//     itemBuilder: (context, index) {
+//       return GestureDetector(
+//         onTap: () {
+//           Navigator.push(
+//             context,
+//             MaterialPageRoute(
+//               builder: (context) => PartnerDetailsPage(
+//                 // idPartner: 2,
+//               ),
+//             ),
+//           );
+//         },
+//         child: Container(
+//           padding: EdgeInsets.all(15),
+//           margin: EdgeInsets.symmetric(horizontal: 25),
+//           decoration: BoxDecoration(
+//             color: AppColors.whiteColor,
+//             borderRadius: BorderRadius.circular(8),
+//             boxShadow: [kWhiteBoxshadow],
+//           ),
+//           child: Row(
+//             children: [
+//               SvgPicture.asset(AppSvgImages.ic_profile),
+//               UIHelper.horizontalSpace(10),
+//               Text(
+//                 // list[index].name,
+//                 'Shooqan',
+//                 style: TextStyle(
+//                   fontSize: 16,
+//                   fontWeight: FontWeight.w500,
+//                   color: AppColors.blackColor,
+//                 ),
+//               ),
+//               Spacer(),
+//               // list[index].bonusesSum != null
+//               //     ? 
+//                   Text(
+//                       // "${list[index].bonusesSum} Б",
+//                       '750 Б',
+//                       style: TextStyle(
+//                         fontSize: 16,
+//                         fontWeight: FontWeight.w600,
+//                         color: AppColors.systemGreenColor,
+//                       ),
+//                     )
+//                   // : Text(
+//                   //     "${list[index].bonusPercentage} %",
+//                   //     style: TextStyle(
+//                   //       fontSize: 16,
+//                   //       fontWeight: FontWeight.w600,
+//                   //       color: AppColors.blackColor,
+//                   //     ),
+//                   //   ),
+//             ],
+//           ),
+//         ),
+//       );
+//     },
+//     separatorBuilder: (context, index) => UIHelper.verticalSpace(18),
+//     itemCount: list.length,
+//   );
+// }

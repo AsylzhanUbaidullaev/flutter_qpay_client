@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_qpay_client/screens/partners/provider/subcategory_details_provider.dart';
+// import 'package:flutter_qpay_client/models/partner_list_model.dart';
 import 'package:flutter_qpay_client/screens/partners/ui/partner_details.dart';
 import 'package:flutter_qpay_client/utilities/const_fields.dart';
 import 'package:flutter_qpay_client/utilities/const_methods.dart';
@@ -6,7 +8,8 @@ import 'package:flutter_qpay_client/utilities/ui_helper.dart';
 import 'package:flutter_svg/svg.dart';
 
 listOfPartners(
-  // List<DataOfPartnerListModel> list
+  // List<DataOfPartnerListModel>? list
+  SubcategoryDetailsProvider model
   ) {
   // return
   // ListView.separated(
@@ -25,7 +28,7 @@ listOfPartners(
                 MaterialPageRoute(
                     builder: (context) =>
                         PartnerDetailsPage(
-                          // idPartner: list[index].id
+                          idPartner: model.partnersHasBonuses[index].id
                           )));
           },
           child: Container(
@@ -41,9 +44,8 @@ listOfPartners(
                 SvgPicture.asset(AppSvgImages.ic_profile),
                 UIHelper.horizontalSpace(10),
                 Text(
-                  // list[preIndex].data[index].name,
-                  'Pandora',
-                  // list[index].name,
+                  // 'Pandora',
+                  model.partnersHasBonuses[index].name!,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -52,9 +54,8 @@ listOfPartners(
                 ),
                 Spacer(),
                 Text(
-                  // list[preIndex].data[index].bonusesSum + " Б",
-                  '750 Б',
-                  // list[index].bonusesSum + " Б",
+                  // '750 Б',
+                  "${model.partnersHasBonuses[index].bonusesSum ?? 0} Б",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -68,8 +69,8 @@ listOfPartners(
       },
       separatorBuilder: (context, index) => UIHelper.verticalSpace(18),
       // itemCount: list[preIndex].data.length);
-      itemCount: 2,
-      // itemCount: list.length
+      itemCount: model.partnersHasBonuses.length,
+      // itemCount: list!.length,
       );
   //   },
   //   separatorBuilder: (BuildContext context, int index) =>

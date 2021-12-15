@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "449975302761",
+    "project_id": "qpay-client-e8286",
+    "storage_bucket": "qpay-client-e8286.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449975302761:android:225c7e67c11032e4aa00f8",
+        "android_client_info": {
+          "package_name": "com.example.flutter_qpay_client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "449975302761-emcd8blmgnvcb129fp7mamn8n8sdo0n2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmlyPPqOhCyV2RvkFgeqT5jSjNP-heeeg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "449975302761-emcd8blmgnvcb129fp7mamn8n8sdo0n2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

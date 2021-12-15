@@ -1,6 +1,8 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_qpay_client/base/base_provider.dart';
 import 'package:flutter_qpay_client/screens/home/provider/city_alert_provider.dart';
+import 'package:flutter_qpay_client/screens/home/provider/home_provider.dart';
 import 'package:flutter_qpay_client/utilities/const_fields.dart';
 import 'package:flutter_qpay_client/utilities/size_config.dart';
 
@@ -9,7 +11,7 @@ final BoxDecoration kPinPutDecoration = BoxDecoration(
   borderRadius: BorderRadius.circular(8),
 );
 
-appBar(context) {
+appBar(context, HomeProvider model) {
   return PreferredSize(
     preferredSize: Size.fromHeight(getProportionateScreenHeight(70)),
     child: AppBar(
@@ -31,7 +33,8 @@ appBar(context) {
               padding: EdgeInsets.zero,
             ),
             child: Text(
-              'Алматы',
+              // Алматы
+              '${model.selectedCityName}',
               style: TextStyle(
                 color: AppColors.primaryColor,
                 fontSize: 14,
@@ -41,89 +44,81 @@ appBar(context) {
             onPressed: () {
               showDialog(
                   context: context,
-                  builder: (context) {
-                    return BaseProvider<CityAlertDialog>(
-                      model: CityAlertDialog(),
-                      builder: (context, model, child) {
-                        return AlertDialog(
-                          contentPadding: EdgeInsets.zero,
-                          title: Text(
-                            'Выберите город',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: AppColors.blackColor,
-                            ),
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(20),
-                            ),
-                          ),
-                          content: Scrollbar(
-                            child: SingleChildScrollView(
-                              child: Container(
-                                width: double.maxFinite,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      itemCount: 15,
-                                      itemBuilder: (context, index) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            // Navigator.pop(context);
-                                            // homeState.setCityNameAndId(
-                                            //     snapshot.data[index].name,
-                                            //     snapshot.data[index].id,
-                                            //     context);
-                                          },
-                                          child: Container(
-                                            width: double.infinity,
-                                            color: index % 2 == 0
-                                                ? AppColors.whiteColor
-                                                : Color(0xffDFDFDF),
-                                            padding: EdgeInsets.symmetric(
-                                              vertical: 17,
-                                              horizontal: 19,
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  // model.cities[index],
-                                                  'Аккент',
-                                                  
-                                                  // snapshot.data[index].name,
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: AppColors.blackColor,
-                                                  ),
-                                                ),
-                                                // index == cityId
-                                                //     // model
-                                                //     //     .selectedCity
-                                                //     ? SvgPicture.asset(
-                                                //         AppSvgImages
-                                                //             .ic_city_check)
-                                                //     // SizedBox()
-                                                //     : SizedBox(),
-                                              ],
-                                            ),
-                                          ),
-                                        );
+                  builder: (builderContext) {
+                    return AlertDialog(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                        'Выберите город',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: AppColors.blackColor,
+                        ),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20),
+                        ),
+                      ),
+                      content: Scrollbar(
+                        child: SingleChildScrollView(
+                          child: Container(
+                            width: double.maxFinite,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: model.cities.length,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+
+                                        // Navigator.of(builderContext).pop(false);
+                                        model.changeCity(index+1, model.cities[index].name!, context, model);
                                       },
-                                    ),
-                                  ],
+                                      child: Container(
+                                        width: double.infinity,
+                                        color: index % 2 == 0
+                                            ? AppColors.whiteColor
+                                            : Color(0xffDFDFDF),
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 17,
+                                          horizontal: 19,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              model.cities[index].name!,
+                                              // 'Аккент',
+
+                                              // snapshot.data[index].name,
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: AppColors.blackColor,
+                                              ),
+                                            ),
+                                            // index == cityId
+                                            //     // model
+                                            //     //     .selectedCity
+                                            //     ? SvgPicture.asset(
+                                            //         AppSvgImages
+                                            //             .ic_city_check)
+                                            //     // SizedBox()
+                                            //     : SizedBox(),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
-                              ),
+                              ],
                             ),
                           ),
-                        );
-                      },
+                        ),
+                      ),
                     );
                   });
             },

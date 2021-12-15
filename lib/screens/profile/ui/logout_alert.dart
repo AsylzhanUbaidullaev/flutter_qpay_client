@@ -19,6 +19,7 @@ alertDialogForLogout(BuildContext context) {
         CupertinoDialogAction(
           child: Text('Да, выйти'),
           onPressed: () {
+            //TODO profile provider
             exitAccount(context);
           },
         ),

@@ -10,6 +10,7 @@ import 'package:flutter_qpay_client/widgets/default_button.dart';
 class AddNamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       body: BaseProvider<AddNameProvider>(
         model: AddNameProvider(),
@@ -66,7 +67,7 @@ class AddNamePage extends StatelessWidget {
                         ? null
                         : AppColors.inactiveColor,
                     press: model.isButtonEnabled
-                        ? () async {model.toHomePage(context);}
+                        ? () async {model.saveClient(context, model.controller.text);}
                         : null,
                     width: double.infinity,
                   

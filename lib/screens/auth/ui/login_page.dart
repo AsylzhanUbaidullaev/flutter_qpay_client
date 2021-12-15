@@ -7,15 +7,18 @@ import 'package:flutter_qpay_client/utilities/size_config.dart';
 import 'package:flutter_qpay_client/utilities/ui_helper.dart';
 import 'package:flutter_qpay_client/widgets/custom_container.dart';
 import 'package:flutter_qpay_client/widgets/default_button.dart';
+import 'package:flutter_qpay_client/widgets/loading_view.dart';
 
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       body: BaseProvider<LoginProvider>(
         model: LoginProvider(),
         builder: (context, model, child) {
-          return SafeArea(
+          return model.isLoading ? LoadingView() :
+          SafeArea(
             child: Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: getProportionateScreenWidth(40),
@@ -54,7 +57,7 @@ class LoginPage extends StatelessWidget {
                         keyboardType: TextInputType.phone,
                         cursorColor: AppColors.blackColor,
                         inputFormatters: [
-                          MaskedInputFormatter('### ### ## ##'),
+                          MaskedInputFormatter('### ### ####'),
                         ],
                         decoration: InputDecoration(
                           prefixIcon: Padding(
@@ -69,7 +72,7 @@ class LoginPage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          hintText: 'XXX XXX XX XX',
+                          hintText: 'XXX XXX XXXX',
                           hintStyle: TextStyle(
                             fontFamily: 'Inter',
                             fontSize: 16,

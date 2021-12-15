@@ -1,22 +1,21 @@
+import 'package:flutter_qpay_client/core/network/interfaces/base_network_model.dart';
 
-class TransactionsModel {
-  List<DataOfTransactionModel>? data;
+class PartnerModel extends BaseNetworkModel<PartnerModel> {
+  List<PartnerDetail>? data;
   Links? links;
-  MetaOfTransactionModel? meta;
+  Meta? meta;
 
-  TransactionsModel({this.data, this.links, this.meta});
+  PartnerModel({this.data, this.links, this.meta});
 
-  TransactionsModel.fromJson(Map<String, dynamic> json) {
+  PartnerModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      data = <DataOfTransactionModel>[];
+      data = <PartnerDetail>[];
       json['data'].forEach((v) {
-        data!.add(DataOfTransactionModel.fromJson(v));
+        data!.add(new PartnerDetail.fromJson(v));
       });
     }
     links = json['links'] != null ? new Links.fromJson(json['links']) : null;
-    meta = json['meta'] != null
-        ? new MetaOfTransactionModel.fromJson(json['meta'])
-        : null;
+    meta = json['meta'] != null ? new Meta.fromJson(json['meta']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -34,90 +33,32 @@ class TransactionsModel {
   }
 
   @override
-  TransactionsModel fromJson(Map<String, dynamic> json) {
-    return TransactionsModel.fromJson(json);
+  PartnerModel fromJson(Map<String, dynamic> json) {
+    return PartnerModel.fromJson(json);
   }
 }
 
-class DataOfTransactionModel {
-  String? date;
-  List<Array>? array;
-
-  DataOfTransactionModel({this.date, this.array});
-
-  DataOfTransactionModel.fromJson(Map<String, dynamic> json) {
-    date = json['date'];
-    if (json['array'] != null) {
-      array = <Array>[];
-      json['array'].forEach((v) {
-        array!.add(new Array.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['date'] = this.date;
-    if (this.array != null) {
-      data['array'] = this.array!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class Array {
+class PartnerDetail {
   int? id;
-  String? type;
   String? avatar;
   String? name;
-  String? phone;
-  int? amount;
-  int? bonus;
-  int? bonusPercentage;
-  String? bonusColor;
-  String? createdUserName;
-  int? commentsCount;
+  String? bonusesSum;
 
-  Array(
-      {this.id,
-      this.type,
-      this.avatar,
-      this.name,
-      this.phone,
-      this.amount,
-      this.bonus,
-      this.bonusPercentage,
-      this.bonusColor,
-      this.createdUserName,
-      this.commentsCount});
+  PartnerDetail({this.id, this.avatar, this.name, this.bonusesSum});
 
-  Array.fromJson(Map<String, dynamic> json) {
+  PartnerDetail.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    type = json['type'];
     avatar = json['avatar'];
     name = json['name'];
-    phone = json['phone'];
-    amount = json['amount'];
-    bonus = json['bonus'];
-    bonusPercentage = json['bonus_percentage'];
-    bonusColor = json['bonus_color'];
-    createdUserName = json['created_user_name'];
-    commentsCount = json['comments_count'];
+    bonusesSum = json['bonuses_sum'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['type'] = this.type;
     data['avatar'] = this.avatar;
     data['name'] = this.name;
-    data['phone'] = this.phone;
-    data['amount'] = this.amount;
-    data['bonus'] = this.bonus;
-    data['bonus_percentage'] = this.bonusPercentage;
-    data['bonus_color'] = this.bonusColor;
-    data['created_user_name'] = this.createdUserName;
-    data['comments_count'] = this.commentsCount;
+    data['bonuses_sum'] = this.bonusesSum;
     return data;
   }
 }
@@ -147,7 +88,7 @@ class Links {
   }
 }
 
-class MetaOfTransactionModel {
+class Meta {
   int? currentPage;
   int? from;
   int? lastPage;
@@ -157,7 +98,7 @@ class MetaOfTransactionModel {
   int? to;
   int? total;
 
-  MetaOfTransactionModel(
+  Meta(
       {this.currentPage,
       this.from,
       this.lastPage,
@@ -167,14 +108,14 @@ class MetaOfTransactionModel {
       this.to,
       this.total});
 
-  MetaOfTransactionModel.fromJson(Map<String, dynamic> json) {
+  Meta.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
     from = json['from'];
     lastPage = json['last_page'];
     if (json['links'] != null) {
       links = <Links>[];
       json['links'].forEach((v) {
-        links!.add(Links.fromJson(v));
+        links!.add(new Links.fromJson(v));
       });
     }
     path = json['path'];
@@ -199,14 +140,14 @@ class MetaOfTransactionModel {
   }
 }
 
-class LinksOfTransationModel {
+class LinksOfPartnerModel {
   String? url;
   String? label;
   bool? active;
 
-  LinksOfTransationModel({this.url, this.label, this.active});
+  LinksOfPartnerModel({this.url, this.label, this.active});
 
-  LinksOfTransationModel.fromJson(Map<String, dynamic> json) {
+  LinksOfPartnerModel.fromJson(Map<String, dynamic> json) {
     url = json['url'];
     label = json['label'];
     active = json['active'];

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_qpay_client/base/base_provider.dart';
-import 'package:flutter_qpay_client/models/home_model.dart';
+import 'package:flutter_qpay_client/screens/home/provider/city_alert_provider.dart';
 import 'package:flutter_qpay_client/screens/home/provider/home_provider.dart';
+import 'package:flutter_qpay_client/screens/partners/ui/partner_details.dart';
 import 'package:flutter_qpay_client/utilities/const_fields.dart';
 import 'package:flutter_qpay_client/utilities/const_methods.dart';
 import 'package:flutter_qpay_client/utilities/ui_helper.dart';
+import 'package:flutter_qpay_client/widgets/loading_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatelessWidget {
@@ -12,19 +14,25 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // CityAlertDialogProvider cityAlertDialogProvider = CityAlertDialogProvider();
     return BaseProvider<HomeProvider>(
       model: HomeProvider(),
+      onReady: (value) async => await value.init(context),
       builder: (context, model, child) {
-        return Scaffold(
-          appBar: appBar(context),
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Future builder
-                FutureBuilder<HomeModel>(
-                  builder: (context, snapshot) {
-                    return Column(
+        return model.isLoading
+            ? LoadingView()
+            : Scaffold(
+                appBar: appBar(context, model),
+                body:
+                    // model.isLoading
+                    //     ? LoadingView()
+                    //     :
+                    Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Future builder
+
+                    Column(
                       children: [
                         UIHelper.verticalSpace(25),
                         Container(
@@ -63,7 +71,7 @@ class HomePage extends StatelessWidget {
                                 children: [
                                   UIHelper.horizontalSpace(20),
                                   Text(
-                                    '750 Б',
+                                    '${model.homeModel!.bonus ?? 0} Б',
                                     style: TextStyle(
                                       fontSize: 24,
                                       fontWeight: FontWeight.w600,
@@ -73,7 +81,7 @@ class HomePage extends StatelessWidget {
                                   UIHelper.horizontalSpace(90),
                                   // Spacer(),
                                   Text(
-                                    '150 ₸',
+                                    '${model.homeModel!.saved} ₸',
                                     style: TextStyle(
                                       fontSize: 24,
                                       fontWeight: FontWeight.w600,
@@ -106,7 +114,7 @@ class HomePage extends StatelessWidget {
                                   Padding(
                                     padding: EdgeInsets.only(right: 16),
                                     child: Text(
-                                      '2',
+                                      '${model.homeModel!.transactionsCount}',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
@@ -132,7 +140,7 @@ class HomePage extends StatelessWidget {
                                   Padding(
                                     padding: EdgeInsets.only(right: 16),
                                     child: Text(
-                                      '1',
+                                      '${model.homeModel!.partnersCount}',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
@@ -141,7 +149,6 @@ class HomePage extends StatelessWidget {
                                     ),
                                   ),
                                 ],
-
                               ),
                               UIHelper.verticalSpace(16),
                               Divider(
@@ -159,7 +166,7 @@ class HomePage extends StatelessWidget {
                                   Padding(
                                     padding: EdgeInsets.only(right: 16),
                                     child: Text(
-                                      '1',
+                                      '${model.homeModel!.notActivitedBonusesCount}',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
@@ -174,14 +181,33 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                       ],
-                    );
-                  },
-                ),
-                // Future builder
-                UIHelper.verticalSpace(15),
-                FutureBuilder(
-                  builder: (context, snapshot) {
-                    return Column(
+                    ),
+
+                    // Future builder
+                    UIHelper.verticalSpace(15),
+
+                    // Center(
+                    //       child: Card(
+                    //         color: AppColors.whiteColor,
+                    //         child: Container(
+                    //             width:
+                    //                 MediaQuery.of(context).size.width * 0.8,
+                    //             padding: EdgeInsets.symmetric(
+                    //                 horizontal: 20, vertical: 15),
+                    //             child: Text(
+                    //               "You have not partners",
+                    //               textAlign: TextAlign.center,
+                    //               style: TextStyle(
+                    //                 color: AppColors.darkGrayColor,
+                    //                 fontSize: 14,
+                    //                 fontWeight: FontWeight.w400,
+                    //                 fontFamily: 'Inter',
+                    //               ),
+                    //             )),
+                    //       ),
+                    //     );
+
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
@@ -198,10 +224,21 @@ class HomePage extends StatelessWidget {
                         UIHelper.verticalSpace(15),
                         ListView.separated(
                             shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: BouncingScrollPhysics(),
                             itemBuilder: (context, index) {
                               return GestureDetector(
-                                onTap: () {}, //Navigator
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PartnerDetailsPage(
+                                          // idPartner: model.partnerList!
+                                          //     .partners![index].id
+                                          idPartner: model.homePartnerList[index].id,
+                                          ),
+                                    ),
+                                  );
+                                }, //Navigator
                                 child: Container(
                                   margin: EdgeInsets.symmetric(horizontal: 25),
                                   padding: EdgeInsets.all(15),
@@ -215,7 +252,8 @@ class HomePage extends StatelessWidget {
                                       SvgPicture.asset(AppSvgImages.ic_profile),
                                       UIHelper.horizontalSpace(10),
                                       Text(
-                                        'Shoqan',
+                                        // snapshot.data![index].name!,
+                                        model.homePartnerList[index].name!,
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
@@ -223,7 +261,8 @@ class HomePage extends StatelessWidget {
                                         ),
                                       ),
                                       Spacer(),
-                                      Text('750 Б'),
+                                      Text(
+                                          model.homePartnerList[index].bonusesSum!),
                                     ],
                                   ),
                                 ),
@@ -231,16 +270,14 @@ class HomePage extends StatelessWidget {
                             },
                             separatorBuilder: (context, index) =>
                                 UIHelper.verticalSpace(15),
-                            itemCount: 3 //snapshot data length
+                            itemCount:
+                                model.homePartnerList.length //snapshot data length
                             ),
                       ],
-                    );
-                  },
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-        );
+              );
       },
     );
   }

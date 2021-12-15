@@ -36,25 +36,25 @@ class HelpPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => HelpOtionScreen(
-                        //       title: model.helpTypes[index].name,
-                        //       helpOptionId: model.helpTypes[index].id,
-                        //       items: model.helpTypes[index].items,
-                        //     ),
-                        //   ),
-                        // );
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => HelpOptionPage()));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HelpOptionPage(
+                              title: model.helpTypes[index].name,
+                              helpOptionId: model.helpTypes[index].id,
+                              items: model.helpTypes[index].items,
+                            ),
+                          ),
+                        );
+                        // Navigator.push(context, MaterialPageRoute(builder: (context) => HelpOptionPage()));
                       },
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 24),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            // Text(model.helpTypes[index].name),
-                            Text('Общее вопросы'),
+                            Text("${model.helpTypes[index].name}"),
+                            // Text('Общее вопросы'),
                             SvgPicture.asset(AppSvgImages.ic_arrow_right),
                           ],
                         ),
@@ -62,8 +62,8 @@ class HelpPage extends StatelessWidget {
                     );
                   },
                   separatorBuilder: (context, index) => Divider(height: 1),
-                  // itemCount: model.helpTypes.length,
-                  itemCount: 2,
+                  itemCount: model.helpTypes.length,
+                  // itemCount: 2,
                 ),
                 Divider(height: 1),
               ],
