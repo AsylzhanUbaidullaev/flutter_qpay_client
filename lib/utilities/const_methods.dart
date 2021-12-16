@@ -7,7 +7,7 @@ import 'package:flutter_qpay_client/utilities/const_fields.dart';
 import 'package:flutter_qpay_client/utilities/size_config.dart';
 
 final BoxDecoration kPinPutDecoration = BoxDecoration(
-  color: Color(0xffF8F8F8),
+  color: Color(0xffE8E7EA),
   borderRadius: BorderRadius.circular(8),
 );
 

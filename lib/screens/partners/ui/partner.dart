@@ -31,9 +31,6 @@ class PartnerPage extends StatelessWidget {
             appBar: _buildAppBarWithSearchField(model, context),
             body: model.isLoading ? LoadingView() : !model.isSearching ?
             SingleChildScrollView(
-              // controller: model.isSearchingPartner
-              //     ? model.partnersController
-              //     : model.searchController,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -65,7 +62,6 @@ class PartnerPage extends StatelessWidget {
                                       ),
                                     ),
                                   );
-                                  // Navigator.push(context, MaterialPageRoute(builder: (context) => SubcategoriesPage()));
                                 },
                                 child: Container(
                                   height: 62,
@@ -79,11 +75,8 @@ class PartnerPage extends StatelessWidget {
                                   child: Row(
                                     children: [
                                       SvgPicture.network(model.categories[index].icon!),
-                                      // SvgPicture.network(
-                                      //     snapshot.data![index].icon),
                                       UIHelper.horizontalSpace(15),
                                       Text(
-                                        // snapshot.data![index].name,
                                         model.categories[index].name ?? 'Магазин',
                                         // 'Магазин',
                                         style: TextStyle(

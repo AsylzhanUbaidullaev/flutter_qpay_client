@@ -55,45 +55,4 @@ class LoginProvider extends BaseBloc {
     isButtonEnabled = value;
     notifyListeners();
   }
-
-
-  
-  // toVerificationPage(context) async {
-  //   String? answer = await AuthService().toRegisterOrLogin('+7 ${controller.text}');
-
-  //   if(answer == 'success') {
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(
-  //           builder: (context) => VerificationPage(
-  //                 phoneNumber: '+7 ${controller.text}',
-  //               )));
-  //   } else {
-  //     print("Error during logging in");
-  //   }
-
-  // }
-
-  // toVerification(BuildContext context) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => VerificationPage(
-  //         phoneNumber: "+7 ${controller.text}",
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // toRegisterOrLogin(context) async {
-  //   final String? answer =
-  //       await AuthService().toRegisterOrLogin("+7 ${controller.text}");
-  //   print("LOGIIIIN SENDED");
-  //   print('+7 ${controller.text}');
-  //   if (answer == "success") {
-  //     toVerification(context);
-  //   } else {
-  //     print('Error');
-  //   }
-  // }
 }

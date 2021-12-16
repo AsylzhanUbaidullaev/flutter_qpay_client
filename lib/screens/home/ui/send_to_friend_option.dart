@@ -17,18 +17,11 @@ import 'package:flutter_qpay_client/widgets/custom_container.dart';
 import 'package:flutter_qpay_client/widgets/default_button.dart';
 
 class SendToFriendOptionPage extends StatelessWidget {
-  // final PartnerModel partnerModel;
-  // const SendToFriendOptionPage({
-  //   Key? key,
-  //   required this.partnerModel,
-  // }) : super(key: key);
-
   final int? partnerIndex;
   final String? partnerName;
   final String? availableBonus;
 
   const SendToFriendOptionPage({Key? key, required this.partnerIndex, required this.availableBonus, required this.partnerName}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {

@@ -42,6 +42,11 @@ class PartnerTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // SvgPicture.asset(AppSvgImages.ic_profile),
+                  // CircleAvatar(
+                  //   backgroundImage: NetworkImage(
+                  //             partner!.avatar!,
+                  //           ),
+                  // ),
                   Center(
                     child: CircleAvatar(
                       radius: 20,
@@ -71,14 +76,6 @@ class PartnerTile extends StatelessWidget {
                           color: AppColors.blackColor,
                         ),
                       ),
-                      // UIHelper.verticalSpace(7),
-                      // Text(
-                      //   '${client.phone}',
-                      //   style: TextStyle(
-                      //     fontSize: 13,
-                      //     color: AppColors.grayColor,
-                      //   ),
-                      // ),
                     ],
                   ),
                   Spacer(),
@@ -93,36 +90,6 @@ class PartnerTile extends StatelessWidget {
                 ],
               ),
             ),
-            // UIHelper.verticalSpace(15),
-            // Divider(height: 1),
-            // UIHelper.verticalSpace(17),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 15),
-            //   child: Row(
-            //     children: [
-            //       Text(
-            //         '${client.transactionsCount}' +
-            //             model!
-            //                 .defineWordForListElement(client.transactionsCount),
-            //         style: TextStyle(
-            //           fontSize: 12,
-            //           color: AppColors.grayColor,
-            //         ),
-            //       ),
-            //       Spacer(),
-            //       Text(
-            //         client.transactionsSum != null
-            //             ? '${client.transactionsSum}' + ' \u{20B8}'
-            //             : '0' + ' \u{20B8}',
-            //         style: TextStyle(
-            //           fontSize: 12,
-            //           fontWeight: FontWeight.w400,
-            //           color: AppColors.grayColor,
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
             UIHelper.verticalSpace(15),
           ],
         ),

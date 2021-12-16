@@ -7,18 +7,12 @@ import 'package:flutter_qpay_client/base/base_bloc.dart';
 import 'package:flutter_qpay_client/core/freezed/network_error.dart';
 import 'package:flutter_qpay_client/core/freezed/result.dart';
 import 'package:flutter_qpay_client/services/transaction_service.dart';
-// import 'package:flutter_qpay_client/models/transaction_model.dart';
 import 'package:flutter_qpay_client/utilities/const_fields.dart';
 import 'package:intl/intl.dart';
 
 class TransactionsProvider extends BaseBloc {
-
   ScrollController controller = ScrollController();
   late TransactionsModel transactionsModel;
-  
-  // String toDate = DateFormat("yyyy-MM-dd").format(DateTime.now());
-  // String fromDate = DateFormat("yyyy-MM-dd").format(DateTime(
-  //     DateTime.now().year, DateTime.now().month - 1, DateTime.now().day));
 
   DateTime fromDate = DateTime.now().subtract(Duration(days: 180));
   DateTime toDate = DateTime.now();
@@ -30,7 +24,6 @@ class TransactionsProvider extends BaseBloc {
   int selectedType = 0;
   String typeOfTransactions = "";
   List typesList = [];
-
 
   init() async {
     setLoading(true);

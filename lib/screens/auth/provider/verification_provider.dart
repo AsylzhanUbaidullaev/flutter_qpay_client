@@ -45,12 +45,6 @@ class VerificationProvider extends BaseBloc {
     setLoading(false);
   }
 
-
-  // toAddNamePage(context) {
-  //   Navigator.push(
-  //       context, MaterialPageRoute(builder: (context) => AddNamePage()));
-  // }
-
   checkPinCode() {
     if(controller.text.length == 4) {
       setIsButtonEnabled(true);

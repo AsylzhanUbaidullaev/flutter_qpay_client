@@ -19,84 +19,95 @@ class SendToFriend extends StatelessWidget {
         onReady: (value) => value.init(context),
         model: HomeProvider(),
         builder: (context, model, child) {
-          return model.isLoading ? LoadingView() :
-          
-          SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                UIHelper.verticalSpace(15),
-                Padding(
-                  padding: EdgeInsets.only(left: 25),
-                  child: Text(
-                    'Выберите партнера',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.blackColor,
-                    ),
-                  ),
-                ),
-                UIHelper.verticalSpace(15),
-                ListView.separated(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      SendToFriendOptionPage(
-                                        partnerIndex: model.sendToFriendPartnerList[index].id!,
-                                        availableBonus: model.sendToFriendPartnerList[index].bonusesSum,
-                                        partnerName: model.sendToFriendPartnerList[index].name,
-                                        )));
-                        },
-                        child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 25),
-                          padding: EdgeInsets.all(15),
-                          decoration: BoxDecoration(
-                            color: AppColors.whiteColor,
-                            boxShadow: [kWhiteBoxshadow],
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                child:
-                                    SvgPicture.asset(AppSvgImages.ic_profile),
-                              ),
-                              UIHelper.horizontalSpace(10),
-                              Text(
-                                model.sendToFriendPartnerList[index].name!,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.blackColor,
-                                ),
-                              ),
-                              Spacer(),
-                              Text(
-                                model.sendToFriendPartnerList[index].bonusesSum!,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.systemGreenColor,
-                                ),
-                              )
-                            ],
+          return model.isLoading
+              ? LoadingView()
+              : SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      UIHelper.verticalSpace(15),
+                      Padding(
+                        padding: EdgeInsets.only(left: 25),
+                        child: Text(
+                          'Выберите партнера',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.blackColor,
                           ),
                         ),
-                      );
-                    },
-                    separatorBuilder: (context, index) =>
-                        UIHelper.verticalSpace(10),
-                    itemCount: model.sendToFriendPartnerList.length)
-              ],
-            ),
-          );
+                      ),
+                      UIHelper.verticalSpace(15),
+                      ListView.separated(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            SendToFriendOptionPage(
+                                              partnerIndex: model
+                                                  .sendToFriendPartnerList[
+                                                      index]
+                                                  .id!,
+                                              availableBonus: model
+                                                  .sendToFriendPartnerList[
+                                                      index]
+                                                  .bonusesSum,
+                                              partnerName: model
+                                                  .sendToFriendPartnerList[
+                                                      index]
+                                                  .name,
+                                            )));
+                              },
+                              child: Container(
+                                margin: EdgeInsets.symmetric(horizontal: 25),
+                                padding: EdgeInsets.all(15),
+                                decoration: BoxDecoration(
+                                  color: AppColors.whiteColor,
+                                  boxShadow: [kWhiteBoxshadow],
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      child: SvgPicture.asset(
+                                          AppSvgImages.ic_profile),
+                                    ),
+                                    UIHelper.horizontalSpace(10),
+                                    Text(
+                                      model
+                                          .sendToFriendPartnerList[index].name!,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.blackColor,
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    Text(
+                                      model.sendToFriendPartnerList[index]
+                                          .bonusesSum!,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.systemGreenColor,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                              UIHelper.verticalSpace(10),
+                          itemCount: model.sendToFriendPartnerList.length)
+                    ],
+                  ),
+                );
         },
       ),
     );

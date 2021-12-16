@@ -49,8 +49,6 @@ class TransactionDetail extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Text(
-                        // type
-                        // 'Начисление бонусов',
                         model.transactionDetailsModel!.detail!.type!,
                         style: TextStyle(
                           fontSize: 13,
@@ -62,14 +60,13 @@ class TransactionDetail extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Text(
-                        '+750 Б',
-                        // "${model.transactionDetailsModel!.bonus!} Б",
+                        // '+750 Б',
+                        "${model.transactionDetailsModel!.detail!.bonus} Б",
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.w600,
                           color: model.defineColor(model.transactionDetailsModel!.detail!.type!)
                           // AppColors.systemGreenColor,
-                          // model.defineColor(snapshot.data.detail.type),
                         ),
                       ),
                     ),
@@ -93,13 +90,7 @@ class TransactionDetail extends StatelessWidget {
                     UIHelper.verticalSpace(10),
                     GestureDetector(
                       onTap: () {
-                        // Navigator.push(
-                        //       context,
-                        //       MaterialPageRoute(
-                        //         builder: (context) => PartnerDetailsScreen(
-                        //             idPartner: snapshot.data.partner.id),
-                        //       ),
-                        //     );
+                        model.toPartnerDetailPage(context, model.transactionDetailsModel!.partner!.id!);
                       },
                       child: Container(
                         margin: EdgeInsets.symmetric(horizontal: 25),
@@ -111,16 +102,15 @@ class TransactionDetail extends StatelessWidget {
                         ),
                         child: Row(
                           children: [
-                            SvgPicture.asset(AppSvgImages.ic_profile),
-                            // CircleAvatar(
-                            //       backgroundImage: NetworkImage(
-                            //           "${snapshot.data.partner.image}"),
-                            //     ),
+                            // SvgPicture.asset(AppSvgImages.ic_profile),
+                            CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                      "${model.transactionDetailsModel!.partner!.image}"),
+                                ),
                             UIHelper.horizontalSpace(10),
                             Text(
-                              // model.transactionDetailsModel!.name ?? 'Name',
-                              'Shooqan',
-                              // '${snapshot.data.partner.name}',
+                              model.transactionDetailsModel!.partner!.name!,
+                              // 'Shooqan',
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w500,

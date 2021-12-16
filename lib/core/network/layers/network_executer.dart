@@ -55,7 +55,8 @@ class NetworkExecuter {
         showAlert(GlobalVariable.navState.currentContext!, error);
         break;
       case 422:
-      Navigator.push(GlobalVariable.navState.currentContext!, MaterialPageRoute(builder: (context) => AddNamePage()));
+      // Navigator.push(GlobalVariable.navState.currentContext!, MaterialPageRoute(builder: (context) => AddNamePage()));
+      showCustomToast("Incorrect value");
         // showAlert(GlobalVariable.navState.currentContext!, error);
         print("The data you have provided is invalid.");
         break;

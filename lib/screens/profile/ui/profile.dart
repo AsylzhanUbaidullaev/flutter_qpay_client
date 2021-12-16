@@ -41,20 +41,17 @@ class ProfilePage extends StatelessWidget {
                             CircleAvatar(
                               backgroundColor:
                                   AppColors.primaryColor.withOpacity(0.9),
-                              // backgroundImage: NetworkImage(snapshot.data.image),
                               maxRadius:
                                   MediaQuery.of(context).size.width * 0.11,
                               minRadius:
                                   MediaQuery.of(context).size.width * 0.09,
                               child: Image.network(model.profileModel!.image!)
-                                  // SvgPicture.asset(AppSvgImages.ic_profile_pic),
                             ),
                             UIHelper.horizontalSpace(20),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  // '${snapshot.data.name}',
                                   model.profileModel!.name!,
                                   style: TextStyle(
                                     fontSize: 16,
@@ -64,7 +61,6 @@ class ProfilePage extends StatelessWidget {
                                 ),
                                 UIHelper.verticalSpace(10),
                                 Text(
-                                  // '${snapshot.data.phone}',
                                   model.profileModel!.phone!,
                                   style: TextStyle(
                                     fontSize: 13,
@@ -92,13 +88,10 @@ class ProfilePage extends StatelessWidget {
                             primary: AppColors.primaryColor.withOpacity(0.05),
                           ),
                           onPressed: () {
-                            // model.toChangeProfile(
-                            //     context, snapshot.data.name, snapshot.data.image);
                             model.toChangeProfile(context, model.profileModel!.name, model.profileModel!.image);
                           },
                           child: Text(
                             'Изменить',
-                            // "change".tr(),
                             style: TextStyle(
                               fontFamily: 'Inter',
                               fontSize: getProportionateScreenWidth(16),
@@ -145,22 +138,6 @@ class ProfilePage extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            // ProfileOptionWithFunc(
-                            //   text: "change_lang".tr(),
-                            //   onTap: () async {
-                            //     print("tapped");
-
-                            //     showModalBottomSheet(
-                            //       context: context,
-                            //       isScrollControlled: true,
-                            //       builder: (context) {
-                            //         return Wrap(
-                            //           children: [ChangeLang()],
-                            //         );
-                            //       },
-                            //     ).then((value) => (context as Element).reassemble());
-                            //   },
-                            // ),
                             InkWell(
                               onTap: () {
                                 alertDialogForLogout(context);
@@ -202,84 +179,3 @@ class ProfilePage extends StatelessWidget {
     );
   }
 }
-
-
-// class ProfileOption extends StatelessWidget {
-//   final String? text;
-//   final Function? onTap;
-//   final String? svg;
-//   const ProfileOption({
-//     Key? key,
-//     this.text,
-//     this.svg,
-//     this.onTap,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return InkWell(
-//       onTap: onTap!(),
-//       child: Container(
-//         width: double.infinity,
-//         padding: EdgeInsets.symmetric(horizontal: 25, vertical: 19),
-//         child: Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             Row(
-//               children: [
-//                 SvgPicture.asset(svg!),
-//                 UIHelper.horizontalSpace(14),
-//                 Text(
-//                   text!,
-//                   style: TextStyle(
-//                     fontSize: 16,
-//                     color: AppColors.blackColor,
-//                   ),
-//                 )
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class ProfileOptionWithFunc extends StatelessWidget {
-//   final String? text;
-
-//   final Function? onTap;
-
-//   const ProfileOptionWithFunc({
-//     Key? key,
-//     this.text,
-//     this.onTap,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return InkWell(
-//       onTap: onTap!(),
-//       child: Container(
-//         width: double.infinity,
-//         padding: EdgeInsets.symmetric(horizontal: 25, vertical: 19),
-//         child: Row(
-//           children: [
-//             SvgPicture.asset(
-//               "assets/images/svg/ic_globe.svg",
-//               color: AppColors.darkGrayColor,
-//             ),
-//             UIHelper.horizontalSpace(14),
-//             Text(
-//               text!,
-//               style: TextStyle(
-//                 fontSize: 16,
-//                 color: AppColors.blackColor,
-//               ),
-//             )
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

@@ -181,7 +181,7 @@ class ChangeProfilePage extends StatelessWidget {
                       },
                     ),
                   ),
-                  UIHelper.verticalSpace(10),
+                  UIHelper.verticalSpace(20),
                 ],
               ),
             );

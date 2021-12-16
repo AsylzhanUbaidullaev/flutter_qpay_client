@@ -15,21 +15,13 @@ import 'package:flutter_qpay_client/services/home_service.dart';
 import 'package:flutter_qpay_client/services/send_to_friend_service.dart';
 
 class HomeProvider extends BaseBloc {
-  // Future<List<CityModel>?>? cities;
-  // Future<HomeModel?>? fHome;
   HomeModel? homeModel;
   List<Partners> homePartnerList = [];
-  // List<PartnerModel>? homePartnerList;
   HomeService _homeService = HomeService();
-  // String? cityName = "Алматы";
   int cityId = 1;
-  // bool cityChanged = false;
-
   Result<CityModel, NetworkError>? cityData;
-  // Result<dynamic, NetworkError>? changeCityData;
   List<Cities> cities = [];
   String selectedCityName = "Алматы";
-
 
   SendToFriendService _sendToFriendService = SendToFriendService();
   List<PartnersHasBonusesModel> sendToFriendPartnerList = [];
@@ -56,9 +48,6 @@ class HomeProvider extends BaseBloc {
     // }
     await getHomePartnersList();
     await getSendToFriendPartnersList();
-    
-    // await getCity();
-    //await getPartners();
     setLoading(false);
   }
 
@@ -69,17 +58,13 @@ class HomeProvider extends BaseBloc {
       notifyListeners();
     }, failure: (error){
       print(error);
-        // error.when(request: request, type: type, connectivity: connectivity)
     });
   }
 
   getHomePartnersList() async {
-    //TODO sharedprefs get city id methodsw
-    // cityId = await getCityId();
     log("City id: ${cityId}");
     Result<List<Partners>, NetworkError> hPL = await _homeService.getHomePartnerList(cityId);
     hPL.when(success: (response) {
-      
       homePartnerList = response;
       notifyListeners();
     }, failure: (error) {
@@ -104,7 +89,6 @@ class HomeProvider extends BaseBloc {
     // });
   }
 
-
   getSendToFriendPartnersList() async {
     partnerData = await _sendToFriendService.getSendToFriendPartnerList(cityId);
     partnerData!.when(success: (response) {
@@ -114,30 +98,4 @@ class HomeProvider extends BaseBloc {
       log("Error: $error");
     });
   }
-
-  // getCityData(context) async {
-  //   if (getCityName() != null) {
-  //     String? cityTempName = await getCityName();
-  //     int? cityTempId = await getCityId();
-  //     setCityNameAndId(cityTempName, cityTempId, context);
-  //   } else {
-  //     setCityData(cityId, cityName);
-  //   }
-  //   cities = CityService().getCities();
-  //   fPartner = HomeService().getPartnersList(context, cityId);
-  //   fHome = HomeService().getInformation(context);
-  //   print("Selected CITY: $cityId - $cityName");
-  //   notifyListeners();
-  // }
-
-  // setCityNameAndId(String? cityTempName, int? cityTempId, context) {
-  //   cityName = cityTempName;
-  //   cityId = cityTempId;
-  //   cityChanged = true;
-  //   if (cityChanged) {
-  //     // w
-  //   }
-  //   setCityData(cityId, cityName);
-  //   notifyListeners();
-  // }
 }

@@ -14,42 +14,6 @@ class Period extends StatelessWidget {
   final TransactionsProvider transactionsProvider;
   const Period({Key? key, required this.transactionsProvider,}) : super(key: key);
 
-  // changeDate(TransactionsProvider transactionState, PeriodProvider model) {
-  //   var fromDate;
-  //   var nowDate =
-  //       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-  //   String formattedNowDay = DateFormat("yyyy-MM-dd").format(nowDate);
-  //   String formatted;
-  //   if (model.selectedPeriod == 0) {
-  //     fromDate = DateTime(
-  //         DateTime.now().year, DateTime.now().month, DateTime.now().day - 7);
-  //     formatted = DateFormat("yyyy-MM-dd").format(fromDate);
-  //     transactionState.setToDate(formattedNowDay);
-  //     transactionState.setFromDate(formatted);
-  //   } else if (model.selectedPeriod == 1) {
-  //     fromDate = DateTime(
-  //         DateTime.now().year, DateTime.now().month - 1, DateTime.now().day);
-  //     formatted = DateFormat("yyyy-MM-dd").format(fromDate);
-  //     transactionState.setToDate(formattedNowDay);
-  //     transactionState.setFromDate(formatted);
-  //   } else if (model.selectedPeriod == 2) {
-  //     fromDate = DateTime(
-  //         DateTime.now().year, DateTime.now().month - 3, DateTime.now().day);
-  //     formatted = DateFormat("yyyy-MM-dd").format(fromDate);
-  //     transactionState.setToDate(formattedNowDay);
-  //     transactionState.setFromDate(formatted);
-  //   } else if (model.selectedPeriod == 3) {
-  //     fromDate = DateTime(
-  //         DateTime.now().year, DateTime.now().month - 6, DateTime.now().day);
-  //     formatted = DateFormat("yyyy-MM-dd").format(fromDate);
-  //     transactionState.setToDate(formattedNowDay);
-  //     transactionState.setFromDate(formatted);
-  //   } else {
-  //     print("Не изменил дату");
-  //   }
-  //   print(transactionState.fromDate + " " + transactionState.toDate);
-  // }
-
   @override
   Widget build(BuildContext context) {
     return BaseProvider<PeriodProvider>(
@@ -125,8 +89,8 @@ class Period extends StatelessWidget {
                           );
                         },
                       ),
-                      InkWell(
-                        onTap: () async {
+                      GestureDetector(
+                        onTap: ()  {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -136,26 +100,28 @@ class Period extends StatelessWidget {
                             ),
                           );
                         },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'За период',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: AppColors.blackColor,
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                SvgPicture.asset(
-                                  AppSvgImages.ic_arrow_right,
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'За период',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColors.blackColor,
                                 ),
-                                UIHelper.horizontalSpace(6),
-                              ],
-                            ),
-                          ],
+                              ),
+                              Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    AppSvgImages.ic_arrow_right,
+                                  ),
+                                  UIHelper.horizontalSpace(6),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       UIHelper.verticalSpace(44),

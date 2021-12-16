@@ -121,7 +121,14 @@ class PeriodPicker extends StatelessWidget {
               ],
             ),
           ),
-          bottomNavigationBar: _buildBottomNavbar(context, model),
+          bottomNavigationBar: 
+          // // Column(
+          // //   children: [
+              _buildBottomNavbar(context, model),
+          //     UIHelper.verticalSpace(10),
+          //   ],
+          // )
+          
         );
       },
     );

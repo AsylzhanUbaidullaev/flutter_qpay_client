@@ -14,10 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/onboarding/ui/onboarding_page.dart';
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // runApp(MyApp());
   WidgetsFlutterBinding.ensureInitialized();
-
   /// Set device orientation
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 

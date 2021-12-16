@@ -8,29 +8,14 @@ import 'package:flutter_qpay_client/core/freezed/network_error.dart';
 import 'package:flutter_qpay_client/core/freezed/result.dart';
 import 'package:flutter_qpay_client/data/data_methods.dart';
 import 'package:flutter_qpay_client/services/partner_service.dart';
-// import 'package:flutter_qpay_client/models/partner_list_model.dart';
-// import 'package:flutter_qpay_client/models/partner_model.dart';
 
 class SubcategoryDetailsProvider extends BaseBloc {
-  ScrollController initController = ScrollController();
-  ScrollController searchController = ScrollController();
-  // List<PartnerModel> initPartnersWithBonus = [];
-  // List<PartnerListModel> initPartnerListModel = [];
-  // List<PartnerListModel> searchList = [];
-  // List<DataOfPartnerListModel> resultsOfSearch = [];
-  String searchName = "";
   int cityId = 1; // added late
-  int initPartnersPage = 1;
-  int searchPartnersPage = 1;
-  bool isPageLoading = true;
-  bool isInitPartners = true;
-  bool isSearchPartners = false;
   bool isMoreInitPartners = false;
   bool isMoreSearchPartners = false;
 
   Result<List<PartnerWithBonusModel>, NetworkError>? partnerData;
   PartnerService _partnerService = PartnerService();
-  // PartnersHasBonusesModel? partnersHasBonusesModel;
   PartnerWithBonusModel? partnerWithBonusModel;
 
   List<PartnerWithBonusModel> partnersHasBonuses = [];

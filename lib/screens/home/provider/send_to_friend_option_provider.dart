@@ -57,15 +57,15 @@ class SendToFriendOptionProvider extends BaseBloc {
   }
 
   checkBonusValue(String hasBonus) {
-    // if (bonus != 0) {
-    //   if (int.parse(hasBonus) >= int.parse(bonus)) {
-    //     hasError = false;
-    //     notifyListeners();
-    //   } else {
-    //     hasError = true;
-    //     notifyListeners();
-    //   }
-    // }
+    if (bonus != 0) {
+      if (int.parse(hasBonus) >= bonus!) {
+        hasError = false;
+        notifyListeners();
+      } else {
+        hasError = true;
+        notifyListeners();
+      }
+    }
   }
 
   // sendBonus(context, 

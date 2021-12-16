@@ -29,7 +29,8 @@ class AddNameProvider extends BaseBloc {
 
   
   toHomePage(context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => IndexScreen(selectedMenuFromInitial: MenuState.home)));
+    // Navigator.push(context, MaterialPageRoute(builder: (context) => IndexScreen(selectedMenuFromInitial: MenuState.home)));
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => IndexScreen(selectedMenuFromInitial: MenuState.home)), (route) => false);
   }
 
   checkClientName() {

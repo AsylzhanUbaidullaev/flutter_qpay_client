@@ -5,6 +5,7 @@ import 'package:flutter_qpay_client/app/data/models/transaction_detail_model.dar
 import 'package:flutter_qpay_client/base/base_bloc.dart';
 import 'package:flutter_qpay_client/core/freezed/network_error.dart';
 import 'package:flutter_qpay_client/core/freezed/result.dart';
+import 'package:flutter_qpay_client/screens/partners/ui/partner_details.dart';
 import 'package:flutter_qpay_client/services/transaction_service.dart';
 import 'package:flutter_qpay_client/utilities/const_fields.dart';
 
@@ -47,5 +48,14 @@ class TransactionDetailsProvider extends BaseBloc {
       case "receiving":
         return AppColors.systemGreenColor;
     }
+  }
+
+  toPartnerDetailPage(context, int id) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PartnerDetailsPage(idPartner: id),
+      ),
+    );
   }
 }

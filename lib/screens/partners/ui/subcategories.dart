@@ -44,11 +44,6 @@ class SubcategoriesPage extends StatelessWidget {
                           ),
                           child: TextField(
                             onChanged: (value) async {
-                              // if (value != "") {
-                              //   await model.searchPartner(value);
-                              // } else {
-                              //   model.toClear();
-                              // }
                             },
                             keyboardType: TextInputType.text,
                             cursorColor: AppColors.primaryColor,
@@ -124,7 +119,6 @@ class SubcategoriesPage extends StatelessWidget {
                                   children: [
                                     Text(
                                       model.subcategories![index].name!,
-                                      // snapshot.data![index].name,
                                       // 'Мебель',
                                       style: TextStyle(
                                         fontSize: 16,

@@ -34,6 +34,7 @@ class PartnerDetailsPage extends StatelessWidget {
               ? LoadingView()
               : Scaffold(
                   body: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -47,28 +48,33 @@ class PartnerDetailsPage extends StatelessWidget {
                               // ??
                               SvgPicture.asset(AppSvgImages.ic_profile_pic),
                               UIHelper.horizontalSpace(20),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    model.detailedPartnerModel!.name!,
-                                    // 'Shooqan',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.blackColor,
+                              Flexible(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      model.detailedPartnerModel!.name!,
+                                      // overflow: TextOverflow.fade,
+                                      // maxLines: 1,
+                                      // softWrap: false,
+                                      // 'Shooqan',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.blackColor,
+                                      ),
                                     ),
-                                  ),
-                                  UIHelper.verticalSpace(10),
-                                  Text(
-                                    model.detailedPartnerModel!.phone!,
-                                    // '+7 747 633 8071',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: AppColors.grayColor,
+                                    UIHelper.verticalSpace(10),
+                                    Text(
+                                      model.detailedPartnerModel!.phone!,
+                                      // '+7 747 633 8071',
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: AppColors.grayColor,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ],
                           ),

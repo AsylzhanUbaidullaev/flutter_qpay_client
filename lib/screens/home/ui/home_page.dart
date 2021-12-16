@@ -14,7 +14,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // CityAlertDialogProvider cityAlertDialogProvider = CityAlertDialogProvider();
     return BaseProvider<HomeProvider>(
       model: HomeProvider(),
       onReady: (value) async => await value.init(context),
@@ -24,14 +23,9 @@ class HomePage extends StatelessWidget {
             : Scaffold(
                 appBar: appBar(context, model),
                 body:
-                    // model.isLoading
-                    //     ? LoadingView()
-                    //     :
                     Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Future builder
-
                     Column(
                       children: [
                         UIHelper.verticalSpace(25),
